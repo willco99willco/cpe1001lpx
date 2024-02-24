@@ -1,1 +1,1 @@
-print ("stupid")
+print ("Hello World")
