@@ -1,5 +1,34 @@
-r="+-----------+\n| REGISTERS |\n| R0: PR0   |\n| R1: PR1   |\n| R2: PR2   |\n| R3: PR3   |\n| R4: PR4   |\n+-----------+"
-print(r.replace("PR0","9"))
+import importlib.util
+import sys
 
-m="+--------+-------+\n| MEMORY |       |\n| D0: PD0  | D1: PD1 |\n| D2: PD2  | D3: PD3 |\n| D4: PD4  | D5: PD5 |\n| D6: PD6  | D7: PD7 |\n| D8: PD8  | D9: PD9 |\n+--------+-------+"
-print(m.replace("PD0","-8"))
+def import_cpe_file(file_path):
+    try:
+    
+        spec = importlib.util.spec_from_file_location("cpe_module", file_path)
+        cpe_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cpe_module)
+        return cpe_module
+    except Exception as e:
+        print(f"Failed to import '{file_path}': {e}")
+        return None
+
+def main():
+    if len(sys.argv) != 3:
+        print("Usage: python cpe1001lpx.py <python_script> <cpe_file>")
+        return
+
+    python_script = sys.argv[1]
+    cpe_file = sys.argv[2]
+
+    try:
+        
+        imported_module = import_cpe_file(cpe_file)
+
+        
+        if imported_module:
+            exec(open(python_script).read())
+    except Exception as e:
+        print(f"Error: {e}")
+
+if __name__ == "__main__":
+    main()
